@@ -1,0 +1,1230 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Espacio de Repaso - MOD Trading – Gestión de riesgo</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --ficde-azul-dark: #134252;
+            --ficde-azul-light: #2c5c6e;
+            --ficde-naranja: #e68161;
+            --ficde-naranja-hover: #ff9f85;
+            --tarjeta-bg: #f0f4f5;
+            --input-bg: #e2e8eb;
+            --texto-principal: #0f2d38;
+            --texto-secundario: #4a636e;
+            --verde-exito: #2e7d32;
+            --verde-bg: #c8e6c9;
+            --rojo-error: #c62828;
+            --naranja-bg: #ffe0b2;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, var(--ficde-azul-dark) 0%, #0a252e 100%);
+            min-height: 100vh;
+            color: var(--texto-principal);
+            padding: 20px;
+            background-attachment: fixed;
+        }
+
+        .container { max-width: 1200px; margin: 0 auto; }
+
+        header {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            padding: 15px 30px;
+            border-radius: 16px;
+            margin-bottom: 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .logo-img { height: 50px; width: auto; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.3)); }
+
+        .module-tag {
+            background: var(--ficde-naranja);
+            color: white;
+            padding: 8px 20px;
+            border-radius: 30px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+        }
+
+        .welcome-card {
+            background: var(--tarjeta-bg);
+            border-radius: 20px;
+            padding: 40px;
+            text-align: center;
+            box-shadow: 0 15px 40px rgba(0,0,0,0.3);
+            border-bottom: 6px solid var(--ficde-naranja);
+            margin-bottom: 30px;
+        }
+
+        .welcome-title {
+            color: var(--ficde-azul-dark);
+            font-size: 2.2rem;
+            margin-bottom: 10px;
+            font-weight: 800;
+        }
+
+        .fede-avatar-large {
+            width: 140px; height: 140px;
+            margin: 0 auto 20px;
+            border-radius: 50%;
+            background: var(--ficde-naranja);
+            padding: 5px;
+            box-shadow: 0 10px 25px rgba(230, 129, 97, 0.5);
+            cursor: pointer;
+            transition: transform 0.3s;
+            overflow: hidden;
+        }
+
+        .fede-avatar-large:hover { transform: scale(1.1); }
+
+        .fede-avatar-large img {
+            width: 100%; height: 100%;
+            object-fit: cover;
+            border-radius: 50%;
+            border: 4px solid white;
+        }
+
+        .blocks-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 20px;
+        }
+
+        .block-card {
+            background: var(--tarjeta-bg);
+            padding: 30px;
+            border-radius: 16px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            border: 2px solid transparent;
+        }
+
+        .block-card:hover {
+            transform: translateY(-8px);
+            border-color: var(--ficde-naranja);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+        }
+
+        .block-icon {
+            font-size: 3rem; margin-bottom: 15px;
+            background: rgba(19, 66, 82, 0.1);
+            width: 70px; height: 70px;
+            display: flex; align-items: center; justify-content: center;
+            border-radius: 50%; color: var(--ficde-azul-dark);
+        }
+
+        .block-title { color: var(--ficde-azul-dark); font-size: 1.3rem; font-weight: 700; margin-bottom: 10px; }
+
+        .block-desc { color: var(--texto-secundario); font-size: 0.9rem; line-height: 1.5; }
+
+        .activity-screen {
+            display: none;
+            grid-template-columns: 280px 1fr;
+            gap: 25px;
+            align-items: start;
+        }
+
+        .activity-screen.active { display: grid; }
+
+        .tutor-sidebar {
+            background: var(--ficde-azul-light);
+            padding: 30px;
+            border-radius: 16px;
+            text-align: center;
+            color: white;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.2);
+            position: sticky; top: 20px;
+        }
+
+        .tutor-bubble {
+            background: rgba(255,255,255,0.95);
+            padding: 20px;
+            border-radius: 12px;
+            font-size: 0.95rem;
+            color: var(--ficde-azul-dark);
+            margin-top: 20px;
+            position: relative;
+            text-align: left;
+        }
+
+        .tutor-bubble::after {
+            content: '';
+            position: absolute;
+            top: -10px;
+            left: 50%;
+            border-width: 0 10px 10px;
+            border-style: solid;
+            border-color: transparent transparent rgba(255,255,255,0.95);
+            transform: translateX(-50%);
+        }
+
+        .activity-content {
+            background: var(--tarjeta-bg);
+            padding: 40px;
+            border-radius: 16px;
+            min-height: 500px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+
+        .act-badge {
+            background: var(--ficde-naranja);
+            color: white;
+            padding: 5px 15px;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+        }
+
+        .act-title { font-size: 1.8rem; color: var(--ficde-azul-dark); margin: 15px 0; font-weight: 800; }
+
+        .act-instruction { font-size: 1.1rem; color: var(--texto-secundario); margin-bottom: 30px; }
+
+        .student-input {
+            width: 100%;
+            height: 150px;
+            padding: 20px;
+            background: var(--input-bg);
+            border: 2px solid transparent;
+            border-radius: 12px;
+            font-family: 'Poppins', sans-serif;
+            font-size: 1rem;
+            color: var(--ficde-azul-dark);
+            transition: all 0.3s;
+        }
+
+        .student-input:focus { background: white; border-color: var(--ficde-naranja); outline: none; }
+
+        .fill-input {
+            border: none;
+            border-bottom: 2px solid var(--ficde-naranja);
+            background: transparent;
+            font-weight: 700;
+            color: var(--ficde-azul-dark);
+            text-align: center;
+            width: 150px;
+            font-size: 1.1rem;
+        }
+
+        .btn-action {
+            width: 100%;
+            padding: 18px;
+            margin-top: 30px;
+            border: none;
+            border-radius: 50px;
+            font-weight: 700;
+            font-size: 1.1rem;
+            cursor: pointer;
+            background: linear-gradient(90deg, var(--ficde-naranja), #ff9f85);
+            color: white;
+            box-shadow: 0 6px 20px rgba(230, 129, 97, 0.4);
+            transition: transform 0.2s;
+        }
+
+        .btn-action:hover { transform: translateY(-3px); }
+
+        .btn-back {
+            background: transparent;
+            color: var(--texto-secundario);
+            box-shadow: none;
+            border: 2px solid #ccc;
+            margin-top: 15px;
+        }
+
+        .btn-back:hover { background: #e0e0e0; color: var(--ficde-azul-dark); }
+
+        .traffic-row, .checklist-item {
+            background: white;
+            margin-bottom: 12px;
+            padding: 15px 20px;
+            border-radius: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+            border: 1px solid transparent;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .traffic-row:hover, .checklist-item:hover { border-color: var(--ficde-naranja); transform: translateX(5px); }
+
+        .traffic-btn {
+            width: 35px; height: 35px;
+            border-radius: 50%; border: 2px solid #ddd;
+            cursor: pointer;
+            opacity: 0.3;
+        }
+
+        .traffic-btn.active { opacity: 1; transform: scale(1.2); border-color: var(--ficde-azul-dark); }
+
+        .bg-green { background: #4CAF50; }
+
+        .bg-yellow { background: #FFC107; }
+
+        .bg-red { background: #f44336; }
+
+        .check-box {
+            width: 24px; height: 24px;
+            border: 2px solid #ccc;
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 15px;
+        }
+
+        .checklist-item.selected { border-color: var(--ficde-naranja); background: #fff5f0; }
+
+        .checklist-item.selected .check-box { background: var(--ficde-naranja); border-color: var(--ficde-naranja); color: white; }
+
+        .feedback-area {
+            margin-top: 30px;
+            padding: 25px;
+            border-radius: 12px;
+            display: none;
+            animation: slideUp 0.4s;
+        }
+
+        .feedback-success { background: var(--verde-bg); color: #1b5e20; border-left: 6px solid var(--verde-exito); }
+
+        .feedback-retry { background: var(--naranja-bg); color: #bf360c; border-left: 6px solid #ef6c00; }
+
+        .feedback-fail { background: #cfd8dc; color: #37474f; border-left: 6px solid #455a64; }
+
+        #musicToggle {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: var(--ficde-naranja);
+            color: white;
+            border: none;
+            cursor: pointer;
+            z-index: 100;
+            font-size: 1.5rem;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.4);
+        }
+
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @media (max-width: 768px) {
+            .activity-screen { grid-template-columns: 1fr; }
+            .tutor-sidebar { display: flex; align-items: center; gap: 20px; }
+            .fede-avatar-large { width: 80px; height: 80px; }
+            .tutor-bubble::after { display: none; }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- AUDIOS MP3 -->
+    <audio id="bgMusic" loop preload="auto">
+        <source src="chill-study-desk-focus-concentration-lofi-451180.mp3" type="audio/mpeg">
+    </audio>
+
+    <audio id="saludoInicial" preload="auto" src="saludoinicial.mp3"></audio>
+    <audio id="mensaje1Ejercicios" preload="auto" src="mensaje1ejercicios.mp3"></audio>
+    <audio id="mensaje2Ejercicios" preload="auto" src="mensaje2ejercicios.mp3"></audio>
+    <audio id="mensaje3Ejercicios" preload="auto" src="mensaje3ejercicios.mp3"></audio>
+    <audio id="mensaje4Ejercicios" preload="auto" src="mensaje4ejercicios.mp3"></audio>
+    <audio id="respuestaCorrecta" preload="auto" src="respuestacorrecta.mp3"></audio>
+    <audio id="primerError" preload="auto" src="primererror.mp3"></audio>
+    <audio id="segundoError" preload="auto" src="segundoerror.mp3"></audio>
+    <audio id="loLograste" preload="auto" src="lolograste.mp3"></audio>
+
+    <audio id="hoverSound" preload="auto" src="https://assets.mixkit.co/active_storage/sfx/2571/2571-preview.m4a"></audio>
+    <audio id="clickSound" preload="auto" src="https://assets.mixkit.co/active_storage/sfx/2568/2568-preview.m4a"></audio>
+    <audio id="successSound" preload="auto" src="https://assets.mixkit.co/active_storage/sfx/1435/1435-preview.m4a"></audio>
+
+    <button id="musicToggle" onclick="toggleMusic()">🔇</button>
+
+    <div class="container">
+        <header>
+            <div class="logo-container">
+                <img src="logo.png" alt="FICDE" class="logo-img" onerror="this.style.display='none'; document.getElementById('altLogo').style.display='block'">
+                <h2 id="altLogo" style="display:none; color:white; font-weight:800;">FICDE</h2>
+            </div>
+            <div class="module-tag">Módulo: Trading – Gestión de riesgo</div>
+        </header>
+
+        <div id="selectionScreen">
+            <div class="welcome-card">
+                <div class="fede-avatar-large" onclick="playAudio('saludoInicial')">
+                    <img src="personaje.gif" alt="Fede">
+                </div>
+                <h1 class="welcome-title">Espacio de Repaso Interactivo</h1>
+                <p style="color: var(--texto-secundario); font-size: 1.1rem;">Donde el conocimiento se convierte en acción</p>
+            </div>
+
+            <div class="blocks-grid">
+                <div class="block-card" onclick="startModule('sintesis')">
+                    <div class="block-icon">🧠</div>
+                    <div class="block-title">Síntesis</div>
+                    <div class="block-desc">Disciplina del trader, reglas operativas, límites de pérdida, interés compuesto y principios básicos de gestión de riesgo.</div>
+                </div>
+
+                <div class="block-card" onclick="startModule('analisis')">
+                    <div class="block-icon">🔍</div>
+                    <div class="block-title">Análisis Crítico</div>
+                    <div class="block-desc">Evaluación estratégica de gestión Masaniello, costo de oportunidad, disciplina avanzada y crecimiento exponencial del capital.</div>
+                </div>
+
+                <div class="block-card" onclick="startModule('escenarios')">
+                    <div class="block-icon">🎬</div>
+                    <div class="block-title">Escenarios</div>
+                    <div class="block-desc">Aplicación situacional de disciplina, límites de pérdida, interés compuesto, gestión Masaniello y costo de oportunidad.</div>
+                </div>
+
+                <div class="block-card" onclick="startModule('practica')">
+                    <div class="block-icon">⚡</div>
+                    <div class="block-title">Práctica</div>
+                    <div class="block-desc">Aplicación concreta de porcentajes, límites, interés compuesto y gestión disciplinada.</div>
+                </div>
+            </div>
+        </div>
+
+        <div id="activityScreen" class="activity-screen">
+            <div class="tutor-sidebar">
+                <div class="fede-avatar-large" style="width: 100px; height: 100px; border-color: var(--ficde-naranja);" onclick="replayTutorMessage()">
+                    <img src="personaje.gif" alt="Fede">
+                </div>
+                <div style="flex:1;">
+                    <h3 style="color:var(--ficde-naranja); margin-bottom:5px;">Tutor Fede</h3>
+                    <div class="tutor-bubble" id="tutorMessage"></div>
+                </div>
+            </div>
+
+            <div class="activity-content" id="activityContainer"></div>
+        </div>
+    </div>
+
+    <script>
+        // ===== GESTIÓN DE AUDIO MP3 =====
+        const audioFiles = {
+            saludoInicial: document.getElementById('saludoInicial'),
+            mensaje1: document.getElementById('mensaje1Ejercicios'),
+            mensaje2: document.getElementById('mensaje2Ejercicios'),
+            mensaje3: document.getElementById('mensaje3Ejercicios'),
+            mensaje4: document.getElementById('mensaje4Ejercicios'),
+            correcto: document.getElementById('respuestaCorrecta'),
+            error1: document.getElementById('primerError'),
+            error2: document.getElementById('segundoError'),
+            lolograste: document.getElementById('loLograste')
+        };
+
+        function playAudio(audioKey) {
+            if (audioFiles[audioKey]) {
+                audioFiles[audioKey].currentTime = 0;
+                audioFiles[audioKey].play().catch(err => console.log('Error al reproducir audio:', err));
+            }
+        }
+
+        const bgMusic = document.getElementById('bgMusic');
+        const clickSoundEl = document.getElementById('clickSound');
+        const successSoundEl = document.getElementById('successSound');
+        const hoverSoundEl = document.getElementById('hoverSound');
+
+        let musicOn = false;
+        let audioUnlocked = false;
+
+        function unlockAudio() {
+            if (audioUnlocked) return;
+            Object.values(audioFiles).forEach(a => {
+                a.volume = 0;
+                const p = a.play();
+                if (p) p.then(() => { a.pause(); a.currentTime = 0; a.volume = 1; }).catch(()=>{});
+            });
+            audioUnlocked = true;
+        }
+
+        document.addEventListener('pointerdown', unlockAudio, { once: true });
+        document.addEventListener('keydown', unlockAudio, { once: true });
+
+        function toggleMusic() {
+            unlockAudio();
+            if (!musicOn) {
+                bgMusic.volume = 0.1;
+                bgMusic.play().catch(() => {});
+                document.getElementById('musicToggle').innerText = '🎵';
+            } else {
+                bgMusic.pause();
+                document.getElementById('musicToggle').innerText = '🔇';
+            }
+            musicOn = !musicOn;
+        }
+
+        function playSound(type) {
+            if (!audioUnlocked) return;
+            try {
+                if (type === 'click') { clickSoundEl.currentTime=0; clickSoundEl.volume=0.8; clickSoundEl.play().catch(()=>{}); }
+                if (type === 'success') { successSoundEl.currentTime=0; successSoundEl.volume=0.8; successSoundEl.play().catch(()=>{}); }
+                if (type === 'hover') { hoverSoundEl.currentTime=0; hoverSoundEl.volume=0.2; hoverSoundEl.play().catch(()=>{}); }
+            } catch (e) {}
+        }
+
+        function wireUiSounds() {
+            document.querySelectorAll('.block-card, .btn-action, .checklist-item, .traffic-row, .fede-avatar-large').forEach(el => {
+                if (el.dataset.sound === '1') return;
+                el.dataset.sound = '1';
+                el.addEventListener('mouseenter', () => playSound('hover'));
+                el.addEventListener('click', () => playSound('click'));
+            });
+        }
+
+        window.addEventListener('load', wireUiSounds);
+
+        // ===== NORMALIZACIÓN DE TEXTO =====
+        function normalizar(txt) {
+            return txt.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+        }
+
+        // ===== ACTIVIDADES =====
+        const modules = {
+            sintesis: [
+                {
+                    type: 'text',
+                    badge: "Disciplina en el trading",
+                    title: "Concepto central",
+                    instruction: "¿Qué significa ser disciplinado en el contexto del trading profesional?",
+                    tutor: "Implica seguir reglas objetivas sin excepción.",
+                    explanation: "Ser disciplinado es seguir reglas objetivas para permitir que la probabilidad exprese éxito.",
+                    validation: (raw) => {
+                        const v = normalizar(raw);
+                        const roots = ["discip", "reglas", "probab", "exito", "seguir", "objeti", "permit", "expres", "signif", "contex"];
+                        return roots.filter(r => v.includes(r)).length >= 2;
+                    }
+                },
+                {
+                    type: 'text',
+                    badge: "Reglas del trader",
+                    title: "Aplicación constante",
+                    instruction: "¿Por qué la disciplina debe aplicarse en cada operación y no solo algunas veces?",
+                    tutor: "Una sola operación indisciplinada puede dañar resultados.",
+                    explanation: "Porque una operación sin disciplina puede generar grandes pérdidas y afectar resultados.",
+                    validation: (raw) => {
+                        const v = normalizar(raw);
+                        const roots = ["discip", "operac", "perdid", "result", "puede", "genera", "grande", "afecta", "debe", "aplica"];
+                        return roots.filter(r => v.includes(r)).length >= 2;
+                    }
+                },
+                {
+                    type: 'checklist',
+                    badge: "Control del tamaño de posición",
+                    title: "Gestión en racha negativa",
+                    instruction: "Selecciona acciones correctas cuando se encadenan operaciones perdedoras",
+                    items: [
+                        { text: "Reducir tamaño de posición", correct: true },
+                        { text: "Aumentar contratos para recuperar", correct: false },
+                        { text: "Mantener misma exposición", correct: false },
+                        { text: "Volver gradualmente al tamaño habitual tras racha positiva", correct: true }
+                    ].sort(() => Math.random() - 0.5),
+                    tutor: "Primero proteger capital, luego recuperar ritmo.",
+                    explanation: "Reducir exposición protege capital y permite retomar tamaño tras recuperar consistencia."
+                },
+                {
+                    type: 'text',
+                    badge: "Primera pérdida",
+                    title: "Gestión emocional",
+                    instruction: "¿Por qué se afirma que la primera pérdida es la mejor?",
+                    tutor: "Es mejor asumirla temprano que agrandarla.",
+                    explanation: "Porque cerrar temprano limita pérdida y protege capital antes de que crezca.",
+                    validation: (raw) => {
+                        const v = normalizar(raw);
+                        const roots = ["perdid", "cierre", "discip", "capita", "cerrar", "tempra", "limita", "proteg", "antes", "crezca"];
+                        return roots.filter(r => v.includes(r)).length >= 2;
+                    }
+                },
+                {
+                    type: 'blanks',
+                    anyOrder: false,
+                    badge: "Interés compuesto",
+                    title: "Fórmula básica",
+                    instruction: "Completar la frase<br><br>La fórmula del interés compuesto es Dinero x (1 \\+ i) elevado a la _____.",
+                    blanks: ["n"],
+                    tutor: "Representa cantidad de períodos.",
+                    explanation: "La variable n representa los períodos donde el capital genera intereses acumulados."
+                },
+                {
+                    type: 'text',
+                    badge: "Interés compuesto vs simple",
+                    title: "Diferencia clave",
+                    instruction: "¿Cuál es la diferencia fundamental entre interés simple e interés compuesto?",
+                    tutor: "En uno se reinvierten los beneficios.",
+                    explanation: "El compuesto reinvierte intereses generando crecimiento exponencial del capital.",
+                    validation: (raw) => {
+                        const v = normalizar(raw);
+                        const roots = ["reinve", "intere", "capita", "crecim", "compue", "reinvi", "genera", "expone", "difere", "fundam"];
+                        return roots.filter(r => v.includes(r)).length >= 2;
+                    }
+                },
+                {
+                    type: 'checklist',
+                    badge: "Límites de pérdida",
+                    title: "Protección diaria",
+                    instruction: "Selecciona principios correctos sobre límites diarios",
+                    items: [
+                        { text: "Definir límite máximo diario", correct: true },
+                        { text: "Seguir operando tras superar límite", correct: false },
+                        { text: "Apagar el sistema si se alcanza pérdida máxima", correct: true },
+                        { text: "Proteger capital para volver mañana", correct: true }
+                    ].sort(() => Math.random() - 0.5),
+                    tutor: "Siempre debes poder operar al día siguiente.",
+                    explanation: "El límite diario evita grandes pérdidas y permite continuidad operativa."
+                },
+                {
+                    type: 'text',
+                    badge: "No vengarse del mercado",
+                    title: "Error emocional",
+                    instruction: "¿Qué implica intentar vengarse del mercado tras una pérdida?",
+                    tutor: "Es actuar impulsivamente.",
+                    explanation: "Implica operar impulsivamente sin disciplina aumentando riesgo y pérdidas.",
+                    validation: (raw) => {
+                        const v = normalizar(raw);
+                        const roots = ["emocio", "discip", "perdid", "mercad", "implic", "operar", "impuls", "aument", "riesgo", "intent"];
+                        return roots.filter(r => v.includes(r)).length >= 2;
+                    }
+                },
+                {
+                    type: 'traffic',
+                    badge: "Principios básicos",
+                    title: "Verdadero o falso operativo",
+                    instruction: "Marca afirmaciones correctas sobre disciplina y mercado",
+                    items: [
+                        { text: "El mercado siempre tiene razón", color: "green" },
+                        { text: "Se debe invertir más del 10% por operación para crecer rápido", color: "red" },
+                        { text: "Nunca se debe invertir más del 5% en una operación", color: "green" },
+                        { text: "El mercado tiene preferencias personales", color: "red" }
+                    ].sort(() => Math.random() - 0.5),
+                    tutor: "El mercado es neutro y la disciplina protege capital.",
+                    explanation: "Respetar límites y aceptar que el mercado tiene razón evita grandes pérdidas."
+                },
+                {
+                    type: 'text',
+                    badge: "Porcentaje por operación",
+                    title: "Recomendación prudente",
+                    instruction: "¿Qué porcentaje del capital se recomienda arriesgar por operación?",
+                    tutor: "Entre uno y dos por ciento es lo aconsejado.",
+                    explanation: "Se recomienda arriesgar entre 1% y 2%, nunca más del 5% del capital.",
+                    validation: (raw) => {
+                        const v = normalizar(raw);
+                        const roots = ["capita", "recomi", "arries", "nunca", "porcen", "operac", "terap", "salud", "proces", "atenc"];
+                        return roots.filter(r => v.includes(r)).length >= 2;
+                    }
+                }
+            ],
+            analisis: [
+                {
+                    type: 'text',
+                    badge: "Gestión Masaniello",
+                    title: "Porcentaje de efectividad",
+                    instruction: "¿Qué porcentaje mínimo de efectividad necesita la gestión Masaniello en configuración 5/3?",
+                    tutor: "Tres aciertos sobre cinco.",
+                    explanation: "Necesita aproximadamente 60% de efectividad para ser aplicada correctamente.",
+                    validation: (raw) => {
+                        const v = normalizar(raw);
+                        const roots = ["efecti", "operac", "necesi", "aproxi", "aplica", "correc", "porcen", "minimo", "gestio", "masani"];
+                        return roots.filter(r => v.includes(r)).length >= 2;
+                    }
+                },
+                {
+                    type: 'text',
+                    badge: "Pilar de Masaniello",
+                    title: "Fundamento matemático",
+                    instruction: "¿Sobre qué principio financiero se basa la gestión Masaniello?",
+                    tutor: "Reinversión de beneficios.",
+                    explanation: "Se basa en interés compuesto exponencial aplicado a la gestión del capital.",
+                    validation: (raw) => {
+                        const v = normalizar(raw);
+                        const roots = ["intere", "compue", "expone", "capita", "riesgo", "basa", "aplica", "gestio", "princi", "financ"];
+                        return roots.filter(r => v.includes(r)).length >= 2;
+                    }
+                },
+                {
+                    type: 'checklist',
+                    badge: "Costo de oportunidad",
+                    title: "Concepto económico",
+                    instruction: "Selecciona afirmaciones correctas sobre costo de oportunidad",
+                    items: [
+                        { text: "Es el valor de la mejor alternativa no elegida", correct: true },
+                        { text: "Se relaciona con recursos limitados", correct: true },
+                        { text: "Solo aplica a corto plazo", correct: false },
+                        { text: "Ayuda a evaluar inversiones", correct: true }
+                    ].sort(() => Math.random() - 0.5),
+                    tutor: "Siempre hay una alternativa sacrificada.",
+                    explanation: "El costo de oportunidad mide beneficio perdido al no elegir mejor alternativa."
+                },
+                {
+                    type: 'text',
+                    badge: "Consistencia",
+                    title: "Confianza operativa",
+                    instruction: "¿Por qué la consistencia produce confianza y control en el trading?",
+                    tutor: "Repetir método genera estabilidad.",
+                    explanation: "Porque aplicar reglas consistentemente genera control y estabilidad emocional.",
+                    validation: (raw) => {
+                        const v = normalizar(raw);
+                        const roots = ["consis", "reglas", "discip", "contro", "aplica", "genera", "estabi", "emocio", "produc", "confia"];
+                        return roots.filter(r => v.includes(r)).length >= 2;
+                    }
+                },
+                {
+                    type: 'blanks',
+                    anyOrder: false,
+                    badge: "Interés compuesto",
+                    title: "Crecimiento anual",
+                    instruction: "Completar la frase<br><br>El interés compuesto permite que los __________ generen más __________ al reinvertirse.",
+                    blanks: ["beneficios", "beneficios"],
+                    tutor: "El dinero trabaja sobre sí mismo.",
+                    explanation: "Los beneficios reinvertidos generan nuevos beneficios exponenciales."
+                },
+                {
+                    type: 'text',
+                    badge: "Grandes pérdidas",
+                    title: "Impacto psicológico",
+                    instruction: "¿Por qué una gran pérdida puede afectar más que varias pequeñas?",
+                    tutor: "Daña mente y cuenta.",
+                    explanation: "Porque afecta capital y confianza emocional dificultando recuperación.",
+                    validation: (raw) => {
+                        const v = normalizar(raw);
+                        const roots = ["confia", "emocio", "capita", "recupe", "afecta", "dificu", "gran", "perdid", "puede", "varias"];
+                        return roots.filter(r => v.includes(r)).length >= 2;
+                    }
+                },
+                {
+                    type: 'checklist',
+                    badge: "Principios para no fundir cuenta",
+                    title: "Conductas correctas",
+                    instruction: "Selecciona principios correctos",
+                    items: [
+                        { text: "Seguir plan disciplinado", correct: true },
+                        { text: "Invertir todo el capital disponible", correct: false },
+                        { text: "Controlar emociones", correct: true },
+                        { text: "Aceptar pérdidas", correct: true }
+                    ].sort(() => Math.random() - 0.5),
+                    tutor: "La emoción descontrolada destruye cuentas.",
+                    explanation: "Disciplina y control emocional protegen el capital operativo."
+                },
+                {
+                    type: 'text',
+                    badge: "Mercado neutral",
+                    title: "Comprensión realista",
+                    instruction: "¿Qué implica afirmar que el mercado es neutro?",
+                    tutor: "No tiene emociones ni preferencias.",
+                    explanation: "Implica que el mercado no tiene preferencias y el trader es responsable.",
+                    validation: (raw) => {
+                        const v = normalizar(raw);
+                        const roots = ["mercad", "neutra", "prefer", "respon", "implic", "trader", "afirma", "neutro", "terap", "salud"];
+                        return roots.filter(r => v.includes(r)).length >= 2;
+                    }
+                },
+                {
+                    type: 'traffic',
+                    badge: "Gestión de riesgo",
+                    title: "Evaluación práctica",
+                    instruction: "Marca afirmaciones correctas sobre gestión responsable",
+                    items: [
+                        { text: "Nunca invertir más del 5% en una operación", color: "green" },
+                        { text: "Intentar recuperar rápido tras pérdida aumentando exposición", color: "red" },
+                        { text: "Aceptar pérdidas forma parte del proceso", color: "green" },
+                        { text: "El mercado castiga falta de disciplina", color: "green" }
+                    ].sort(() => Math.random() - 0.5),
+                    tutor: "La disciplina es la base de la gestión de riesgo.",
+                    explanation: "Gestionar riesgo implica límites claros, aceptación de pérdidas y control emocional."
+                },
+                {
+                    type: 'text',
+                    badge: "Capital sostenible",
+                    title: "Continuidad operativa",
+                    instruction: "¿Por qué siempre debes poder volver a operar al día siguiente?",
+                    tutor: "No debes arriesgar más de lo permitido.",
+                    explanation: "Porque proteger capital garantiza continuidad y disciplina operativa futura.",
+                    validation: (raw) => {
+                        const v = normalizar(raw);
+                        const roots = ["capita", "contin", "limite", "discip", "proteg", "garant", "operat", "futura", "siempr", "debes"];
+                        return roots.filter(r => v.includes(r)).length >= 2;
+                    }
+                }
+            ],
+            escenarios: [
+                {
+                    type: 'text',
+                    badge: "Racha negativa",
+                    title: "Reducción de exposición",
+                    instruction: "Un trader acumula dos operaciones perdedoras consecutivas. ¿Qué debería hacer según las reglas de disciplina?",
+                    tutor: "Primero proteger capital antes de intentar recuperar.",
+                    explanation: "Debe reducir tamaño de posición para proteger capital y recuperar disciplina.",
+                    validation: (raw) => {
+                        const v = normalizar(raw);
+                        const roots = ["reduci", "posici", "discip", "perdid", "debe", "tamano", "proteg", "capita", "recupe", "trader"];
+                        return roots.filter(r => v.includes(r)).length >= 2;
+                    }
+                },
+                {
+                    type: 'traffic',
+                    badge: "Límite diario",
+                    title: "Protección del capital",
+                    instruction: "Marca afirmaciones correctas sobre límite de pérdida diaria",
+                    items: [
+                        { text: "Debe fijarse un límite máximo de pérdida diaria", color: "green" },
+                        { text: "Si se alcanza el límite, se debe continuar operando", color: "red" },
+                        { text: "El objetivo es poder operar al día siguiente", color: "green" },
+                        { text: "Superar el límite mejora la disciplina", color: "red" }
+                    ].sort(() => Math.random() - 0.5),
+                    tutor: "El capital protegido garantiza continuidad operativa.",
+                    explanation: "Respetar límite diario evita grandes pérdidas y preserva continuidad."
+                },
+                {
+                    type: 'text',
+                    badge: "Primera pérdida",
+                    title: "Decisión inmediata",
+                    instruction: "El precio comienza a moverse en contra de tu operación. ¿Por qué conviene cerrar rápidamente?",
+                    tutor: "La primera pérdida suele ser la mejor.",
+                    explanation: "Cerrar temprano limita pérdida y protege capital antes de que aumente.",
+                    validation: (raw) => {
+                        const v = normalizar(raw);
+                        const roots = ["perdid", "capita", "discip", "protec", "cerrar", "tempra", "limita", "proteg", "antes", "aument"];
+                        return roots.filter(r => v.includes(r)).length >= 2;
+                    }
+                },
+                {
+                    type: 'checklist',
+                    badge: "Gestión Masaniello",
+                    title: "Aplicación práctica",
+                    instruction: "Selecciona principios correctos de la gestión Masaniello",
+                    items: [
+                        { text: "Se basa en interés compuesto", correct: true },
+                        { text: "Requiere conocer porcentaje de efectividad", correct: true },
+                        { text: "Necesita 100% de aciertos", correct: false },
+                        { text: "Puede funcionar con 60% de efectividad", correct: true }
+                    ].sort(() => Math.random() - 0.5),
+                    tutor: "La clave es probabilidad y reinversión.",
+                    explanation: "Masaniello utiliza interés compuesto y probabilidad mínima cercana al 60%."
+                },
+                {
+                    type: 'text',
+                    badge: "Interés compuesto",
+                    title: "Reinversión estratégica",
+                    instruction: "¿Qué ocurre cuando se reinvierten beneficios en lugar de retirarlos?",
+                    tutor: "El dinero genera más dinero.",
+                    explanation: "Los beneficios reinvertidos aumentan capital generando crecimiento exponencial.",
+                    validation: (raw) => {
+                        const v = normalizar(raw);
+                        const roots = ["reinve", "benefi", "capita", "crecim", "aument", "genera", "expone", "ocurre", "reinvi", "lugar"];
+                        return roots.filter(r => v.includes(r)).length >= 2;
+                    }
+                },
+                {
+                    type: 'traffic',
+                    badge: "Costo de oportunidad",
+                    title: "Decisión financiera",
+                    instruction: "Marca afirmaciones correctas sobre costo de oportunidad",
+                    items: [
+                        { text: "Es el valor de la mejor alternativa no elegida", color: "green" },
+                        { text: "Solo aplica cuando hay pérdidas", color: "red" },
+                        { text: "Se utiliza para evaluar inversiones con recursos limitados", color: "green" },
+                        { text: "No tiene relación con decisiones financieras", color: "red" }
+                    ].sort(() => Math.random() - 0.5),
+                    tutor: "Elegir implica renunciar a otra alternativa.",
+                    explanation: "El costo de oportunidad mide beneficio perdido por no elegir mejor opción."
+                },
+                {
+                    type: 'text',
+                    badge: "Venganza al mercado",
+                    title: "Error emocional",
+                    instruction: "Tras una pérdida importante decides aumentar el riesgo para recuperar. ¿Qué error estás cometiendo?",
+                    tutor: "Es operar impulsivamente.",
+                    explanation: "Estás actuando por emociones rompiendo disciplina y aumentando riesgo innecesario.",
+                    validation: (raw) => {
+                        const v = normalizar(raw);
+                        const roots = ["emocio", "discip", "riesgo", "mercad", "actuan", "rompie", "aument", "innece", "tras", "perdid"];
+                        return roots.filter(r => v.includes(r)).length >= 2;
+                    }
+                },
+                {
+                    type: 'checklist',
+                    badge: "Principios básicos",
+                    title: "Conducta correcta",
+                    instruction: "Selecciona principios correctos para no fundir una cuenta",
+                    items: [
+                        { text: "Seguir plan disciplinado", correct: true },
+                        { text: "Invertir todo el capital", correct: false },
+                        { text: "Aceptar pérdidas", correct: true },
+                        { text: "Controlar emociones", correct: true }
+                    ].sort(() => Math.random() - 0.5),
+                    tutor: "La emoción sin control destruye cuentas.",
+                    explanation: "Disciplina, aceptación de pérdidas y control emocional protegen capital."
+                },
+                {
+                    type: 'text',
+                    badge: "Consistencia",
+                    title: "Confianza operativa",
+                    instruction: "¿Por qué repetir el mismo método genera confianza en el trader?",
+                    tutor: "Repetir reglas estabiliza resultados.",
+                    explanation: "La consistencia en método y reglas genera control y confianza operativa.",
+                    validation: (raw) => {
+                        const v = normalizar(raw);
+                        const roots = ["consis", "metodo", "confia", "reglas", "genera", "contro", "operat", "repeti", "trader", "terap"];
+                        return roots.filter(r => v.includes(r)).length >= 2;
+                    }
+                },
+                {
+                    type: 'traffic',
+                    badge: "Mercado neutral",
+                    title: "Comprensión real",
+                    instruction: "Marca afirmaciones correctas sobre el mercado",
+                    items: [
+                        { text: "El mercado no tiene preferencias personales", color: "green" },
+                        { text: "El mercado actúa para perjudicarte", color: "red" },
+                        { text: "El precio lo descuenta todo", color: "green" },
+                        { text: "Ignorar reglas no tiene consecuencias", color: "red" }
+                    ].sort(() => Math.random() - 0.5),
+                    tutor: "El mercado es neutro y exige disciplina.",
+                    explanation: "El mercado no tiene preferencias y exige respeto a reglas."
+                }
+            ],
+            practica: [
+                {
+                    type: 'checklist',
+                    badge: "Porcentaje por operación",
+                    title: "Gestión prudente",
+                    instruction: "Selecciona porcentajes adecuados para invertir por operación",
+                    items: [
+                        { text: "1%", correct: true },
+                        { text: "2%", correct: true },
+                        { text: "10%", correct: false },
+                        { text: "Hasta 5% máximo", correct: true }
+                    ].sort(() => Math.random() - 0.5),
+                    tutor: "Lo recomendable es entre uno y dos por ciento.",
+                    explanation: "Se recomienda arriesgar entre 1% y 2%, nunca más del 5%."
+                },
+                {
+                    type: 'text',
+                    badge: "Capital sostenible",
+                    title: "Continuidad",
+                    instruction: "¿Por qué no se debe perder más dinero del que puedes permitirte?",
+                    tutor: "Debes poder volver mañana.",
+                    explanation: "Porque proteger capital garantiza continuidad operativa futura.",
+                    validation: (raw) => {
+                        const v = normalizar(raw);
+                        const roots = ["capita", "contin", "limite", "discip", "proteg", "garant", "operat", "futura", "debe", "perder"];
+                        return roots.filter(r => v.includes(r)).length >= 2;
+                    }
+                },
+                {
+                    type: 'blanks',
+                    anyOrder: false,
+                    badge: "Interés compuesto",
+                    title: "Variable clave",
+                    instruction: "Completar la frase<br><br>En la fórmula Dinero x (1 \\+ i)ⁿ, la letra i representa la _____ de interés.",
+                    blanks: ["tasa"],
+                    tutor: "Se expresa en tanto por uno.",
+                    explanation: "La i representa la tasa de interés aplicada al capital."
+                },
+                {
+                    type: 'traffic',
+                    badge: "Grandes pérdidas",
+                    title: "Prevención",
+                    instruction: "Marca afirmaciones correctas sobre grandes pérdidas",
+                    items: [
+                        { text: "Solo las grandes pérdidas pueden hacer daño significativo", color: "green" },
+                        { text: "Las pequeñas pérdidas acumuladas sin control no afectan", color: "red" },
+                        { text: "Las grandes pérdidas afectan emocionalmente", color: "green" },
+                        { text: "No influyen en la confianza del trader", color: "red" }
+                    ].sort(() => Math.random() - 0.5),
+                    tutor: "Las grandes pérdidas dañan capital y confianza.",
+                    explanation: "Evitar grandes pérdidas protege cuenta y estabilidad emocional."
+                },
+                {
+                    type: 'text',
+                    badge: "Gestión Masaniello",
+                    title: "Probabilidad",
+                    instruction: "¿Por qué es necesario conocer el porcentaje de éxito antes de aplicar Masaniello?",
+                    tutor: "Sin probabilidad conocida no hay cálculo correcto.",
+                    explanation: "Porque requiere conocer efectividad para calcular riesgo y crecimiento correcto.",
+                    validation: (raw) => {
+                        const v = normalizar(raw);
+                        const roots = ["probab", "efecti", "riesgo", "capita", "requie", "conoce", "calcul", "crecim", "correc", "necesa"];
+                        return roots.filter(r => v.includes(r)).length >= 2;
+                    }
+                },
+                {
+                    type: 'checklist',
+                    badge: "Disciplina diaria",
+                    title: "Conducta sostenida",
+                    instruction: "Selecciona conductas coherentes con disciplina constante",
+                    items: [
+                        { text: "Seguir reglas siempre", correct: true },
+                        { text: "Cambiar método cada día", correct: false },
+                        { text: "Cerrar posiciones perdedoras", correct: true },
+                        { text: "Operar impulsivamente", correct: false }
+                    ].sort(() => Math.random() - 0.5),
+                    tutor: "La disciplina no es ocasional.",
+                    explanation: "Aplicar reglas siempre y cerrar pérdidas sostiene resultados."
+                },
+                {
+                    type: 'text',
+                    badge: "Aceptar pérdidas",
+                    title: "Realidad del trading",
+                    instruction: "¿Por qué aceptar pérdidas forma parte del proceso profesional?",
+                    tutor: "No todas las operaciones serán ganadoras.",
+                    explanation: "Porque las pérdidas son parte de la probabilidad y deben gestionarse disciplinadamente.",
+                    validation: (raw) => {
+                        const v = normalizar(raw);
+                        const roots = ["perdid", "proces", "discip", "probab", "parte", "deben", "gestio", "acepta", "forma", "profes"];
+                        return roots.filter(r => v.includes(r)).length >= 2;
+                    }
+                },
+                {
+                    type: 'traffic',
+                    badge: "Interés simple",
+                    title: "Diferenciación",
+                    instruction: "Marca afirmaciones correctas sobre interés simple",
+                    items: [
+                        { text: "No reinvierte beneficios", color: "green" },
+                        { text: "Genera crecimiento exponencial", color: "red" },
+                        { text: "Produce mismo rendimiento mensual fijo", color: "green" },
+                        { text: "Acumula intereses sobre intereses", color: "red" }
+                    ].sort(() => Math.random() - 0.5),
+                    tutor: "El interés simple no reinvierte beneficios generados.",
+                    explanation: "El interés simple genera rendimiento lineal sin acumulación exponencial."
+                },
+                {
+                    type: 'text',
+                    badge: "Costo de oportunidad",
+                    title: "Decisión estratégica",
+                    instruction: "¿Por qué es importante considerar el costo de oportunidad al invertir?",
+                    tutor: "Elegir implica renunciar a otra opción.",
+                    explanation: "Porque permite evaluar beneficio perdido al no elegir mejor alternativa.",
+                    validation: (raw) => {
+                        const v = normalizar(raw);
+                        const roots = ["altern", "benefi", "recurs", "decisi", "permit", "evalua", "perdid", "elegir", "mejor", "import"];
+                        return roots.filter(r => v.includes(r)).length >= 2;
+                    }
+                },
+                {
+                    type: 'checklist',
+                    badge: "Protección de cuenta",
+                    title: "Fundamentos",
+                    instruction: "Selecciona fundamentos clave para proteger una cuenta de trading",
+                    items: [
+                        { text: "Controlar emociones", correct: true },
+                        { text: "Invertir sin plan", correct: false },
+                        { text: "Respetar límites", correct: true },
+                        { text: "Seguir disciplina", correct: true }
+                    ].sort(() => Math.random() - 0.5),
+                    tutor: "La disciplina es la base de la protección.",
+                    explanation: "Control emocional, límites y disciplina protegen capital."
+                }
+            ]
+        };
+
+let currentModule = '';
+        let currentIndex = 0;
+        let attemptCount = 0;
+        let lastAudioModule = null;
+
+        // ===== MAPEO DE MÓDULOS A AUDIOS =====
+        const moduloAudioMap = {
+            'sintesis': 'mensaje1',
+            'analisis': 'mensaje2',
+            'escenarios': 'mensaje3',
+            'practica': 'mensaje4'
+        };
+
+        function startModule(id) {
+            playSound('click');
+            currentModule = id;
+            currentIndex = 0;
+            attemptCount = 0;
+            lastAudioModule = id;
+
+            // Reproducir el audio del módulo correspondiente
+            const audioKey = moduloAudioMap[id];
+            if (audioKey) {
+                playAudio(audioKey);
+            }
+
+            document.getElementById('selectionScreen').style.display = 'none';
+            document.getElementById('activityScreen').classList.add('active');
+
+            setTimeout(loadActivity, 300);
+        }
+
+        function loadActivity() {
+            attemptCount = 0;
+
+            if (currentIndex >= modules[currentModule].length) {
+                // Reproducir "lolograste.mp3" al terminar TODAS las preguntas
+                playAudio('lolograste');
+                playSound('success');
+                alert('¡Excelente! Completaste este bloque.');
+                setTimeout(() => {
+                    location.reload();
+                }, 2000);
+                return;
+            }
+
+            const data = modules[currentModule][currentIndex];
+            const container = document.getElementById('activityContainer');
+
+            const msg = `Pregunta ${currentIndex + 1} de ${modules[currentModule].length}: ${data.tutor}`;
+            document.getElementById('tutorMessage').innerText = msg;
+
+            let html = `<span class="act-badge">${data.badge}</span>
+                        <h2 class="act-title">${data.title}</h2>
+                        <p class="act-instruction">${data.instruction}</p>`;
+
+            if (data.type === 'text') {
+                html += `<textarea id="txtInput" class="student-input" placeholder="Escribe tu respuesta con tus palabras..."></textarea>`;
+            } else if (data.type === 'blanks') {
+                html += `<div style="font-size:1.2rem; line-height:2.5;">`;
+                data.blanks.forEach((b, i) => {
+                    html += `${i + 1}. <input type="text" class="fill-input" data-ans="${b}"> <br>`;
+                });
+                html += `</div>`;
+            } else if (data.type === 'traffic') {
+                data.items.forEach((item, i) => {
+                    html += `<div class="traffic-row" id="row-${i}">
+                                <span>${item.text}</span>
+                                <div style="display:flex; gap:10px;">
+                                    <div class="traffic-btn bg-green" onclick="selTraffic(${i}, 'green')"></div>
+                                    <div class="traffic-btn bg-yellow" onclick="selTraffic(${i}, 'yellow')"></div>
+                                    <div class="traffic-btn bg-red" onclick="selTraffic(${i}, 'red')"></div>
+                                </div>
+                            </div>`;
+                });
+            } else if (data.type === 'checklist') {
+                data.items.forEach((item) => {
+                    html += `<div class="checklist-item" onclick="toggleCheck(this)" data-correct="${item.correct}">
+                                <div class="check-box"></div>
+                                <span>${item.text}</span>
+                            </div>`;
+                });
+            }
+
+            html += `<div id="feedback" class="feedback-area"></div>
+                     <button id="btnCheck" class="btn-action" onclick="validate()">Verificar respuesta</button>
+                     <button class="btn-action btn-back" onclick="location.reload()">Salir al menú</button>`;
+
+            container.innerHTML = html;
+            wireUiSounds();
+        }
+
+        let trafficAns = {};
+
+        function selTraffic(idx, color) {
+            trafficAns[idx] = color;
+            const row = document.getElementById(`row-${idx}`);
+            row.querySelectorAll('.traffic-btn').forEach(b => b.classList.remove('active'));
+            row.querySelector(`.bg-${color}`).classList.add('active');
+            playSound('click');
+        }
+
+        function toggleCheck(el) {
+            el.classList.toggle('selected');
+            el.querySelector('.check-box').innerText = el.classList.contains('selected') ? '✓' : '';
+
+            if (el.classList.contains('selected')) {
+                el.style.borderColor = 'var(--ficde-naranja)';
+                el.querySelector('.check-box').style.background = 'var(--ficde-naranja)';
+                el.querySelector('.check-box').style.borderColor = 'var(--ficde-naranja)';
+                el.querySelector('.check-box').style.color = 'white';
+            } else {
+                el.style.borderColor = 'transparent';
+                el.querySelector('.check-box').style.background = 'transparent';
+                el.querySelector('.check-box').style.borderColor = '#ccc';
+            }
+
+            playSound('click');
+        }
+
+        function validate() {
+            const data = modules[currentModule][currentIndex];
+            const feedback = document.getElementById('feedback');
+            let isCorrect = false;
+
+            if (data.type === 'text') {
+                const val = document.getElementById('txtInput').value;
+                isCorrect = data.validation(val);
+            } else if (data.type === 'blanks') {
+                const inputs = document.querySelectorAll('.fill-input');
+                let hits = 0;
+                inputs.forEach(inp => {
+                    const v = normalizar(inp.value.trim());
+                    const ans = normalizar(inp.dataset.ans.trim());
+                    // Lógica corregida para aceptar respuestas de 1 carácter exacto o coincidencias parciales en palabras largas
+                    if (v.length > 0 && (ans === v || (v.length > 1 && ans.startsWith(v.slice(0, Math.max(2, Math.min(v.length, ans.length))))))) {
+                        hits++;
+                    }
+                });
+                isCorrect = (hits === data.blanks.length);
+            } else if (data.type === 'traffic') {
+                let hits = 0;
+                data.items.forEach((item, i) => { if (trafficAns[i] === item.color) hits++; });
+                isCorrect = (hits === data.items.length);
+            } else if (data.type === 'checklist') {
+                let correct = true;
+                document.querySelectorAll('.checklist-item').forEach(item => {
+                    const sel = item.classList.contains('selected');
+                    const should = item.dataset.correct === 'true';
+                    if (sel !== should) correct = false;
+                });
+                isCorrect = correct;
+            }
+
+            feedback.style.display = 'block';
+
+            if (isCorrect) {
+                playAudio('correcto');
+                playSound('success');
+                feedback.className = 'feedback-area feedback-success';
+                feedback.innerHTML = `<strong>¡Muy bien!</strong><br>${data.explanation}`;
+                document.getElementById('btnCheck').innerText = 'Siguiente pregunta →';
+                document.getElementById('btnCheck').onclick = () => { currentIndex++; loadActivity(); };
+            } else {
+                attemptCount++;
+
+                if (attemptCount < 2) {
+                    playAudio('error1');
+                    feedback.className = 'feedback-area feedback-retry';
+                    feedback.innerHTML = `<strong>Buen intento.</strong> Revisá tu respuesta. Pista: ${data.tutor}`;
+                } else {
+                    playAudio('error2');
+                    feedback.className = 'feedback-area feedback-fail';
+                    feedback.innerHTML = `<strong>No pasa nada, aprendamos juntos:</strong><br>${data.explanation}`;
+                    document.getElementById('btnCheck').innerText = 'Entendido, continuar →';
+                    document.getElementById('btnCheck').onclick = () => { currentIndex++; loadActivity(); };
+                }
+            }
+        }
+
+        function replayTutorMessage() {
+            // Replay del último audio de módulo reproducido
+            if (lastAudioModule) {
+                const audioKey = moduloAudioMap[lastAudioModule];
+                if (audioKey) {
+                    playAudio(audioKey);
+                }
+            }
+        }
+    </script>
+</body>
+</html>
